@@ -1,0 +1,22 @@
+<div class="container mt-4" th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded shadow-sm">
+        <a class="navbar-brand fw-bold" href="#">Festival Octubre</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menú -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto"> <!-- 'mr-auto' ahora es 'me-auto' -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/heroes}">Héroes Navales</a>
+                </li>
+
+            </ul>
+
+
+        </div>
+    </nav>
+</div>
