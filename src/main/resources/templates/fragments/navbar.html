@@ -1,4 +1,4 @@
-<div class="container mt-4" th:fragment="navbar">
+<div class="container mt-4" th:fragment="navbar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <nav class="navbar navbar-expand-lg navbar-light bg-light rounded shadow-sm">
         <a class="navbar-brand fw-bold" href="#">Festival Octubre</a>
 
@@ -14,6 +14,45 @@
                     <a class="nav-link" th:href="@{/heroes}">Héroes Navales</a>
                 </li>
 
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/heroes/nuevo}">Registrar Héroe</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasRole('USUARIO')">
+                    <a class="nav-link" th:href="@{/juego}">Adivina la Canción</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/juego/ranking}">Ranking</a>
+                </li>
+
+
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/admin/asignaciones}">Asignaciones</a>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <!-- No autenticado -->
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/login}">Iniciar Sesión</a>
+                </li>
+
+                <!-- Autenticado -->
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <span th:if="${session.usuario != null}"
+                              th:text="|Bienvenido ${session.usuario.nombre}|"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <form th:action="@{/logout}" method="post" class="d-inline">
+                                <button type="submit" class="dropdown-item">Cerrar Sesión</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
             </ul>
 
 

@@ -1,5 +1,7 @@
 package com.example.lab6.config;
 
+import com.example.lab6.repository.UsuarioRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,6 +9,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 
 import javax.sql.DataSource;
 
@@ -14,9 +17,11 @@ import javax.sql.DataSource;
 public class WebSecurityConfig {
 
     final DataSource dataSource;
+    final UsuarioRepository usuarioRepository;
 
-    public WebSecurityConfig(DataSource dataSource) {
+    public WebSecurityConfig(DataSource dataSource, UsuarioRepository usuarioRepository) {
         this.dataSource = dataSource;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Bean
@@ -48,12 +53,26 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/heroes", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/heroes/nuevo", "/heroes/guardar").hasRole("ADMIN")
+
+                        .requestMatchers("/juego").hasRole("USUARIO")
+                        .requestMatchers("/juego/ranking").authenticated()
+                        .requestMatchers("/admin/asignaciones/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/processLogin")
-                        .defaultSuccessUrl("/heroes", true)
+                        .successHandler((request, response, authentication) -> {
+                            DefaultSavedRequest defaultSavedRequest =
+                                    (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+                            HttpSession session = request.getSession();
+
+                            usuarioRepository.findByCorreo(authentication.getName())
+                                    .ifPresent(usuario -> session.setAttribute("usuario", usuario));
+
+                            response.sendRedirect("/heroes");
+                        })
+
                         .permitAll()
                 )
                 .logout(logout -> logout
