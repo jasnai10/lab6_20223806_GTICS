@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Adivina la Canción</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Adivina la Canción Criolla 🎶</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Información del título:</h5>
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item">Letras: <b th:text="${letras}"></b></li>
+                <li class="list-group-item">Espacios: <b th:text="${espacios}"></b></li>
+                <li class="list-group-item">Patrón: <b th:text="${patron}"></b></li>
+                <li class="list-group-item">Longitud total: <b th:text="${longitud}"></b> caracteres</li>
+            </ul>
+
+            <form th:action="@{/juego/adivinar}" method="post" class="d-flex">
+                <input type="text" class="form-control me-2" name="intento" placeholder="Escribe tu intento...">
+                <button type="submit" class="btn btn-primary">Probar</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
