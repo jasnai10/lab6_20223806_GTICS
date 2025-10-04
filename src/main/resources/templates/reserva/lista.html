@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservas - Oktoberfest</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div> <!-- Incluye tu navbar -->
+
+<div class="container mt-4">
+    <h2 class="mb-3">Reserva de Mesas - Oktoberfest</h2>
+
+    <!-- Estado de mesas -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="alert alert-success">
+                Mesas libres: <span th:text="${libres}">0</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="alert alert-danger">
+                Mesas ocupadas: <span th:text="${ocupadas}">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mi reserva -->
+    <div th:if="${miReserva != null}" class="alert alert-info">
+        <h5>Tu reserva</h5>
+        <p>Mesa N° <span th:text="${miReserva.mesa.numero}"></span> |
+            Fecha: <span th:text="${#dates.format(miReserva.fecha, 'dd/MM/yyyy HH:mm')}"></span></p>
+    </div>
+
+    <!-- Mesas disponibles -->
+    <h4>Mesas Disponibles</h4>
+    <div class="row">
+        <div class="col-md-4 mb-3" th:each="mesa : ${mesasDisponibles}">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Mesa N° <span th:text="${mesa.numero}"></span></h5>
+                    <p class="card-text">Capacidad: <span th:text="${mesa.capacidad}"></span> personas</p>
+                    <form th:action="@{'/reserva/reservar/' + ${mesa.id}}" method="post">
+                        <button type="submit" class="btn btn-primary"
+                                th:disabled="${miReserva != null}">
+                            Reservar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

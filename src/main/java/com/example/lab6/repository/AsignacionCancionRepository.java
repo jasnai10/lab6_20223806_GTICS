@@ -10,6 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface AsignacionCancionRepository extends JpaRepository<AsignacionCancion, Integer> {
+
+    Optional<AsignacionCancion> findByUsuario(Usuario usuario);
     Optional<AsignacionCancion> findByUsuarioAndAdivinadaFalse(Usuario usuario);
 
     List<AsignacionCancion> findTop10ByAdivinadaTrueOrderByIntentosAsc();

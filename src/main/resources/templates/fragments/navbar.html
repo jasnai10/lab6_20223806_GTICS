@@ -31,6 +31,13 @@
                     <a class="nav-link" th:href="@{/admin/asignaciones}">Asignaciones</a>
                 </li>
 
+                <li class="nav-item" sec:authorize="hasRole('USUARIO')">
+                    <a class="nav-link" th:href="@{/reserva}">Mis Reservas</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/admin/mesas}">Administrar Mesas</a>
+                </li>
+
             </ul>
 
             <ul class="navbar-nav ms-auto">

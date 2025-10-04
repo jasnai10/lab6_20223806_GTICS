@@ -57,6 +57,9 @@ public class WebSecurityConfig {
                         .requestMatchers("/juego").hasRole("USUARIO")
                         .requestMatchers("/juego/ranking").authenticated()
                         .requestMatchers("/admin/asignaciones/**").hasRole("ADMIN")
+
+                        .requestMatchers("/reserva/**").hasRole("USUARIO")
+                        .requestMatchers("/admin/mesas/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
